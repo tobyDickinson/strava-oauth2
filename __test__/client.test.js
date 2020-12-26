@@ -45,7 +45,7 @@ describe('getToken(reqUrl)', () => {
 
     beforeAll(() => {
         client = new Client(config);
-        axios.post.mockImplementation(async () => token_json);
+        axios.post.mockImplementation(async () => {return {data: token_json}});
     });
 
     it('should throw an exception if the request does not contain all scopes requested', async () => {
