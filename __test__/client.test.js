@@ -1,11 +1,11 @@
-const { Client }= require('../lib/client');
+const { Client } = require('../lib/client');
 
 describe('getAuthorizationUri()', () => {
     const config = {
         client_id: 1234,
         client_secret: 'mysecret',
         redirect_uri: 'https://localhost:8443',
-        scopes: ['read, activity:write'],
+        scopes: ['read', 'activity:write'],
     }
 
     let client;
