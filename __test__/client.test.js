@@ -1,4 +1,5 @@
 const { Client } = require('../lib/client');
+const { Token } = require('../lib/token');
 const lib_config = require('../lib/config');
 const axios = require('axios');
 jest.mock('axios');
@@ -31,30 +32,30 @@ describe('getToken(reqUrl)', () => {
         scopes: ['read', 'activity:write'],
     };
 
+    const token_json = {
+        token_type: 'Bearer',
+        expires_at: 1568775134,
+        expires_in: 21600,
+        refresh_token: 'e5n567567',
+        access_token: 'a4b945687g',
+        athlete: {
+          name: null
+        }
+    }
+
     beforeAll(() => {
         client = new Client(config);
-        axios.post.mockImplementation(async () => {
-            return {
-                token_type: 'Bearer',
-                expires_at: 1568775134,
-                expires_in: 21600,
-                refresh_token: 'e5n567567',
-                access_token: 'a4b945687g',
-                athlete: {
-                  name: null
-                }
-              }
-        });
+        axios.post.mockImplementation(async () => token_json);
     });
 
-    it('should throw an exception if the request does not contain all scopes requested', () => {
+    it('should throw an exception if the request does not contain all scopes requested', async () => {
         const reqUrl = 'https://localhost:8443/?state=&code=db1baba06e40d4b3b3f999c8a0235c346c6b2547&scope=activity:write';
-        expect(() => client.getToken(reqUrl)).toThrow();
+        await expect(client.getToken(reqUrl)).rejects;
     });
 
-    it('should send a post request with the extracted data from the URL', () => {
+    it('should send a post request with the extracted data from the URL', async () => {
         const reqUrl = 'https://localhost:8443/?state=&code=db1baba06e40d4b3b3f999c8a0235c346c6b2547&scope=activity:write,read';
-        client.getToken(reqUrl);
+        await client.getToken(reqUrl);
         
         const expected_request_data = {
             client_id: config.client_id,
@@ -66,5 +67,18 @@ describe('getToken(reqUrl)', () => {
         expect(axios.post).toHaveBeenCalledWith(lib_config.token_uri, expected_request_data);
     });
     
-    it.todo('should create and return a token object based on the Strava auth response');
+    it('should create and return a token object based on the Strava auth response', async () => {
+        const reqUrl = 'https://localhost:8443/?state=&code=db1baba06e40d4b3b3f999c8a0235c346c6b2547&scope=activity:write,read';
+        const response_token = await client.getToken(reqUrl);
+        const token = new Token(
+            token_json.token_type,
+            token_json.expires_at,
+            token_json.expires_in,
+            token_json.refresh_token,
+            token_json.access_token,
+            token_json.athlete
+        );
+
+        expect(response_token).toEqual(token);
+    });
 });
