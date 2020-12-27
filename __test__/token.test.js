@@ -17,7 +17,7 @@ beforeAll(() => {
     );
 });
 
-describe('getAxiosInstance()', () => {
+describe('getSignedAxiosInstance()', () => {
     it('should return an axios instance with the token set in a default authorization header', () => {
         const instance = token.getSignedAxiosInstance();
         expect(instance.defaults.headers).toHaveProperty('Authorization');
