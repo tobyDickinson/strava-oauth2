@@ -79,7 +79,7 @@ describe('getToken(reqUrl)', () => {
     it('should create and return a token object based on the Strava auth response', async () => {
         const reqUrl = 'https://localhost:8443/?state=&code=db1baba06e40d4b3b3f999c8a0235c346c6b2547&scope=activity:write,read';
         const response_token = await client.getToken(reqUrl);
-        
+        expect(response_token).toEqual(token);
     });
     
     it('should create a token when passed a relative URL', async () => {
