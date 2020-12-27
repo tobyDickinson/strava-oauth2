@@ -43,6 +43,15 @@ describe('getToken(reqUrl)', () => {
         }
     }
 
+    const token = new Token(
+        token_json.token_type,
+        token_json.expires_at,
+        token_json.expires_in,
+        token_json.refresh_token,
+        token_json.access_token,
+        token_json.athlete
+    );
+
     beforeAll(() => {
         client = new Client(config);
         axios.post.mockImplementation(async () => {return {data: token_json}});
@@ -70,15 +79,12 @@ describe('getToken(reqUrl)', () => {
     it('should create and return a token object based on the Strava auth response', async () => {
         const reqUrl = 'https://localhost:8443/?state=&code=db1baba06e40d4b3b3f999c8a0235c346c6b2547&scope=activity:write,read';
         const response_token = await client.getToken(reqUrl);
-        const token = new Token(
-            token_json.token_type,
-            token_json.expires_at,
-            token_json.expires_in,
-            token_json.refresh_token,
-            token_json.access_token,
-            token_json.athlete
-        );
-
+        
+    });
+    
+    it('should create a token when passed a relative URL', async () => {
+        const reqUrl = '/api/auth/callback?state=&code=8e8435a0e7c7f7027068611cfe0cd9a3392d974d&scope=read,activity:read_all'
+        const response_token = await client.getToken(reqUrl);
         expect(response_token).toEqual(token);
     });
 });
