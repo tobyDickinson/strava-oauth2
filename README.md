@@ -8,7 +8,7 @@ Using npm:
 npm install strava-oauth2
 ```
 
-## API Reference
+## API Examples
 
 ### Class Instantiation
 `strava-oauth2` exposes 2 classes which can be used to interact with the Strava authentication services.
@@ -29,7 +29,8 @@ const client = new Client(config);
 ```
 
 ### Client Authentication
-The below uses express to redirect a connecting client to the Strava authentication page before parsing the resultant code and obtaining a `Token`.
+#### By URL
+The below uses Express to redirect a connecting client to the Strava authentication page before parsing the resultant code and obtaining a `Token`.
 
 ```js
 app.get('/auth', (req, res) => {
@@ -47,6 +48,26 @@ app.get('/auth/callback', async (req, res) => {
 app.get('/home', (req, res) => {
     res.send('Welcome!');
 });
+```
+
+#### By Request Parameters
+You can also parse the request query string parameters yourself and pass them to `strava-oauth2`, via `Client.getTokenFromObject(params)`. The example below generates a token via the event passed by an [AWS API Gateway Lambda Proxy integration](https://docs.aws.amazon.com/apigateway/latest/developerguide/set-up-lambda-proxy-integrations.html).
+
+```js
+exports.handler = async (event) => {
+    const params = event.queryStringParameters;
+    console.info('Here are our params', params);
+    const token = await client.getTokenFromObject(params);
+}
+```
+
+Console output:
+```
+Here are our params {
+  state: '',
+  code: 'abcdef1234567890',
+  scope: 'read,activity:read_all'
+}
 ```
 
 ### Request Signing
