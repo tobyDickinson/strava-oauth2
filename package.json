@@ -2,12 +2,21 @@
   "name": "strava-api",
   "version": "0.1",
   "description": "A simple Node.JS OAuth2 client for connecting your app to the Strava API",
-  "main": "index.js",
+  "main": "./dist/index.js",
   "engines": {
     "node": ">=20"
   },
+  "exports": {
+    "./types": "./dist/types/index.d.ts",
+    ".": {
+      "import": "./dist/index.js",
+      "default": "./dist/index.js"
+    }
+  },
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "build": "tsc",
+    "types": "tsc --p ./tsconfig.types.json"
   },
   "repository": {
     "type": "git",

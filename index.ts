@@ -1,4 +1,3 @@
-const { Client } = require('./lib/client');
-const { Token } = require('./lib/token');
-
-module.exports = { Client, Token }
+export { Client } from "./lib/client";
+export { Token } from "./lib/token";
+export * from "./types";

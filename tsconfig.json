@@ -7,15 +7,16 @@
     "lib": ["es2023"],
     "module": "node16",
     "target": "es2022",
-
+    "declaration": true,
     "strict": true,
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "moduleResolution": "node16",
     "typeRoots": ["./node_modules/@types"],
-    "types": ["jest", "node"]
+    "types": ["jest", "node"],
+    "outDir": "./dist"
   },
   "exclude": ["node_modules"],
-  "include": ["./**/*.ts"]
+  "include": ["./lib/**/*.ts", "./index.ts", "./types/**/*.ts"]
 }
