@@ -5,7 +5,7 @@ export type ParamObject = {
 };
 
 export type TokenResponse = {
-  token_type: string;
+  token_type: "Bearer";
   expires_at: number;
   expires_in: number;
   refresh_token: string;
